@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>JS Bin</title>
+  <style type="text/css">
+    ul,li {
+      list-style: none;
+      padding:0;
+      margin:0;
+    }
+    .container {
+      margin: 0 auto;
+      width: 550px;
+    }
+    .news {
+      display: flex;
+      margin-bottom: 10px;
+      flex-direction: column;
+    }
+    li {
+      display: flex;
+    }
+    .content {
+      margin-left: 10px;
+    }
+    .content p {
+      color: #ddd;
+    }
+    a{
+        display: flex;
+        text-decoration: none;
+        color: #000;
+      }
+    .switch {
+      /*opacity: 0;*/
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <ul class="news">
+    </ul>
+    <button class="switch">加载更多</button>
+  </div>
+
+  <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+  <script type="text/javascript">
+    var pageIndex = 0;
+    var isOver = false;
+    showNews()
+    
+    $(window).on('scroll',function(){
+      showNews()
+    })
+
+    function showNews(){
+      var $switch = $('.switch')
+      if(isShow($switch) && !isOver ){
+        console.log('1')
+        getNews()
+      }
+    }
+
+    function isShow(node){
+      var offset = node.offset().top
+      var windowHeight = $(window).height()
+      var scrollTop = $(window).scrollTop()
+       if(offset >= scrollTop && offset <= (windowHeight + scrollTop)){
+          return true
+      }else{
+          return false
+      }  
+    }
+
+    function appendHtml(ret){
+      var html = ''
+        if( !(ret.data.length === 0 )){
+          for(i=0; i < ret.data.length; i++){
+            html += `<li>
+                        <a href=${ret.data[i].link}>
+                          <div class="pic">
+                            <img src=${ret.data[i].img}>
+                          </div>
+                          <div class="content">
+                            <h3>${ret.data[i].title}</h3>
+                            <p>${ret.data[i].brif}</p>
+                          </div>
+                        </a>  
+                    </li>`
+          }
+          $('.news').append(html)
+          pageIndex += 1
+        }else{
+          isOver = true
+          html = '没有更多数据了~'
+          $('.news').append(html)
+        }
+        
+    }
+    
+    function getNews(){
+      $.ajax({
+        url: '/getNews',
+        method: 'get',
+        data: {
+          page: pageIndex
+        }
+      }).done(function(ret){
+        console.log(ret)
+        appendHtml(ret)
+        if(isShow($('.switch'))){
+          getNews()
+        }
+        console.log('2')
+      }).fail(function(){
+        alert('系统异常')
+      })
+    }
+
+  </script>
+</body>
+</html>
