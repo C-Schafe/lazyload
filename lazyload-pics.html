@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>JS Bin</title>
+  <style type="text/css">
+    .container {
+      display: flex;
+      flex-wrap: wrap;
+      border: 1px red solid;
+      width: 850px;
+      margin: 0 auto;
+      justify-content:space-around;
+    }
+    .pic-ct img{
+      height: 300px;
+      width: 300px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="pic-ct">
+      <img src="" data-src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1523007515278&di=4216376db3b4205729860a57d8531895&imgtype=0&src=http%3A%2F%2Fimg05.tooopen.com%2Fimages%2F20150612%2Ftooopen_sy_130028772221.jpg">
+    </div>
+    <div class="pic-ct">
+      <img src="" data-src="https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=88123889,4257536115&fm=200&gp=0.jpg">
+    </div>
+    <div class="pic-ct">
+      <img src="" data-src="https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=3902195831,2919382867&fm=200&gp=0.jpg">
+    </div>
+    <div class="pic-ct">
+      <img src="" data-src="https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=2837274803,4065165403&fm=200&gp=0.jpg">
+    </div>
+    <div class="pic-ct">
+      <img src="" data-src="https://ss3.bdstatic.com/70cFv8Sh_Q1YnxGkpoWK1HF6hhy/it/u=300673005,1346373372&fm=200&gp=0.jpg">
+    </div>
+    <div class="pic-ct">
+      <img src="" data-src="https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=685664066,645281607&fm=200&gp=0.jpg">
+    </div>
+    <div class="pic-ct">
+      <img src="" data-src="https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=3120689388,1383905542&fm=200&gp=0.jpg">
+    </div>
+    <div class="pic-ct">
+      <img src="" data-src="https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=3390346388,3397580780&fm=200&gp=0.jpg">
+    </div>
+    <div class="pic-ct">
+      <img src="" data-src="https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=2532543726,1405641974&fm=27&gp=0.jpg">
+    </div>
+  </div>
+  <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+  <script type="text/javascript">
+    
+    showPic()
+    var clock
+    $(window).on('scroll',function(){
+      if(clock){
+        clearTimeout(clock)
+      }
+      clock = setTimeout(function(){
+        showPic()
+      },300)
+      
+    })
+
+    function isLoaded(node){
+      if(node.attr('src') === node.attr('data-src')){
+        return true
+      }else{
+        return false
+      }
+    }
+    function isShow(node){
+      console.log('1')
+      var offset = node.offset().top;
+      var scrollTop = $(window).scrollTop();
+      var windowHeight = $(window).height()
+      if(offset >= scrollTop && offset <= (windowHeight + scrollTop)){
+          return true
+      }else{
+          return false
+      }  
+    }
+    function loadPic(node){
+      if( isShow(node) && !isLoaded(node)){
+        node.attr('src',node.attr('data-src'))
+      } 
+    }
+    function showPic(){
+      $('img').each(function(){
+        var $this = $(this)
+        var checkShow = isShow($this)
+        if(checkShow){
+            loadPic($this)
+        }
+      })
+    }
+  </script>
+</body>
+</html>
